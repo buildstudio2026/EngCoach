@@ -1,0 +1,96 @@
+{
+  "expressions": [],
+  "conversations": [
+    {
+      "id": "28iotvohd",
+      "userId": "admin1",
+      "question": "How do you usually unwind after a long day at work?",
+      "meaning": "일과를 마친 후에는 주로 어떻게 휴식을 취하나요?",
+      "example": "I usually like to take a walk in the park or read a good book to relax.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.505Z"
+    },
+    {
+      "id": "ca4ej3ju2",
+      "userId": "admin1",
+      "question": "What is one healthy habit you've adopted recently?",
+      "meaning": "최근에 채택한 건강한 습관은 무엇인가요?",
+      "example": "I've started drinking more water throughout the day, and it really makes a difference.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.506Z"
+    },
+    {
+      "id": "q5bnc2mo2",
+      "userId": "admin1",
+      "question": "How do you keep up with current social trends?",
+      "meaning": "현재의 사회적 트렌드는 어떻게 파악하나요?",
+      "example": "I follow a mix of news outlets and social media influencers for a balanced view.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.507Z"
+    },
+    {
+      "id": "e9c39lr4z",
+      "userId": "admin1",
+      "question": "What's a personal goal you're working towards right now?",
+      "meaning": "현재 이루기 위해 노력하고 있는 개인 목표는 무엇인가요?",
+      "example": "I'm working on learning Spanish because I want to travel through South America next year.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.508Z"
+    },
+    {
+      "id": "topqzeqnw",
+      "userId": "admin1",
+      "question": "How has technology changed the way you communicate with friends and family?",
+      "meaning": "기술이 친구나 가족과의 소통 방식에 어떻게 변화를 가져왔나요?",
+      "example": "Video calls have become a regular part of our routine, making it easy to stay in touch even from a distance.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.509Z"
+    },
+    {
+      "id": "7xf143nch",
+      "userId": "admin1",
+      "question": "What are your plans for the upcoming weekend?",
+      "meaning": "다가오는 주말 계획은 무엇인가요?",
+      "example": "I'm planning to visit a new art exhibit on Saturday and have brunch with some friends on Sunday.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.509Z"
+    },
+    {
+      "id": "0ryh94d1v",
+      "userId": "admin1",
+      "question": "How do you balance work and personal life these days?",
+      "meaning": "요즘 어떻게 업무와 개인 생활을 균형 있게 유지하나요?",
+      "example": "I set clear boundaries by turning off work emails after 7 PM and spending quality time with family.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.509Z"
+    },
+    {
+      "id": "efuw5uyc0",
+      "userId": "admin1",
+      "question": "What book or movie has influenced you recently?",
+      "meaning": "최근에 당신에게 영향을 준 책이나 영화가 있다면 무엇인가요?",
+      "example": "The book 'Atomic Habits' really changed the way I view habit formation and productivity.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.510Z"
+    },
+    {
+      "id": "sij61liqa",
+      "userId": "admin1",
+      "question": "What's a hobby or interest you've picked up this year?",
+      "meaning": "올해 새로 시작한 취미나 관심사는 무엇인가요?",
+      "example": "I've started learning how to play the guitar and it's been a lot of fun exploring music.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.510Z"
+    },
+    {
+      "id": "2f8j9j7l6",
+      "userId": "admin1",
+      "question": "If you had an extra hour in the day, how would you spend it?",
+      "meaning": "하루에 한 시간이 더 있다면 어떻게 사용하시겠어요?",
+      "example": "I'd probably spend it on learning new skills online or taking a leisurely walk.",
+      "userAnswer": null,
+      "createdAt": "2026-03-17T04:05:57.511Z"
+    }
+  ],
+  "suggestions": []
+}
