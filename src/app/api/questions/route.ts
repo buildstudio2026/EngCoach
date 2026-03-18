@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const userId = searchParams.get('userId') || 'test-user';
 
   try {
-    const allConversations = storage.getConversations(userId);
+    const allConversations = await storage.getConversations(userId);
     const latestConversations = allConversations.filter((c: any) => 
       c.userAnswer === null
     ).sort((a: any, b: any) => 

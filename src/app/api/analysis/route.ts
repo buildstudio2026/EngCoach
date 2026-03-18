@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   try {
     const { userId } = await request.json();
 
-    const allConversations = storage.getConversations(userId);
+    const allConversations = await storage.getConversations(userId);
     const conversations = allConversations
       .filter((c: any) => c.userAnswer !== null)
       .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -32,8 +32,10 @@ export async function POST(request: Request) {
 
     const { suggestions } = JSON.parse(content);
 
-    const savedSuggestions = suggestions.map((s: { expression: string; type: string }) =>
-      storage.addSuggestion(userId, s)
+    const savedSuggestions = await Promise.all(
+      suggestions.map((s: { expression: string; type: string }) =>
+        storage.addSuggestion(userId, s)
+      )
     );
 
     return NextResponse.json(savedSuggestions);
@@ -49,7 +51,7 @@ export async function GET(request: Request) {
     if (!userId) return NextResponse.json({ error: 'Missing userId' }, { status: 400 });
 
     try {
-        const suggestions = storage.getSuggestions(userId);
+        const suggestions = await storage.getSuggestions(userId);
         const sorted = [...suggestions].sort((a: any, b: any) => 
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         ).slice(0, 10);
@@ -62,7 +64,7 @@ export async function GET(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();
-    storage.deleteSuggestion(id);
+    await storage.deleteSuggestion(id);
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: 'Failed to delete suggestion', details: error.message }, { status: 500 });

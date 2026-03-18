@@ -1,46 +1,48 @@
 generator client {
-  provider   = "prisma-client-js"
-  engineType = "library"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-}
-
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
-  expressions Expression[]
-  conversations Conversation[]
-  suggestions Suggestion[]
+  provider = "postgresql"
 }
 
 model Expression {
   id          String   @id @default(cuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id])
   expression  String
-  priority    Int      @default(2) // 3 = high (AI), 2 = user, 1 = low
-  mastery     Int      @default(0) // 0-3
+  meaning     String?
+  explanation String?
+  type        String?  // alternative, expression, grammar
+  priority    Int      @default(2)
+  mastery     Int      @default(0)
   createdAt   DateTime @default(now())
   lastUsed    DateTime?
+
+  @@index([userId])
 }
 
 model Conversation {
   id         String   @id @default(cuid())
   userId     String
-  user       User     @relation(fields: [userId], references: [id])
   question   String
-  userAnswer String?
-  createdAt  DateTime @default(now())
+  meaning    String?
+  example          String?
+  targetExpression String?
+  userAnswer       String?
+  createdAt        DateTime @default(now())
+
+  @@index([userId])
 }
 
 model Suggestion {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  expression String
-  type       String
-  createdAt  DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String
+  original    String?
+  expression  String
+  type        String
+  meaning     String?
+  explanation String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
 }

@@ -19,50 +19,50 @@ export default function LoginPage() {
       localStorage.setItem('engcoach_user', username);
       router.push('/');
     } else {
-      setError('Invalid credentials. Access Denied.');
+      setError('로그인 정보가 올바르지 않습니다.');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-[#0b1120]">
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-[#fffafa]">
       {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[120px]" />
+      <div className="absolute top-0 left-0 w-full h-full opacity-40 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#ffb6b9] rounded-full blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#bae1ff] rounded-full blur-[120px]" />
       </div>
 
       <div className="w-full max-w-md relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
         <div className="text-center mb-12 space-y-4">
-          <div className="inline-flex p-4 rounded-3xl bg-indigo-500/10 border border-indigo-500/20 mb-4">
-             <ShieldCheck size={40} className="text-indigo-400" />
+          <div className="inline-flex p-4 rounded-3xl bg-[#ffb6b9]/20 border border-[#ffb6b9]/30 mb-4">
+             <ShieldCheck size={40} className="text-[#f48eb1]" />
           </div>
-          <h1 className="text-5xl font-black text-white italic tracking-tighter uppercase leading-none">Admin Gate</h1>
-          <p className="text-slate-400 font-medium tracking-widest text-[10px] uppercase">Secure Access Protocol Required</p>
+          <h1 className="text-4xl md:text-5xl font-black text-gray-800 tracking-tight">관리자 접속</h1>
+          <p className="text-gray-400 font-medium tracking-wide text-sm">보안 접근 권한이 필요합니다</p>
         </div>
 
-        <form onSubmit={handleLogin} className="premium-card p-10 space-y-8">
+        <form onSubmit={handleLogin} className="premium-card p-6 md:p-10 space-y-6 md:space-y-8 bg-white/60">
           <div className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Identity</label>
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">아이디</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#f48eb1] transition-colors">
                   <User size={18} />
                 </div>
                 <input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="admin1 or admin2"
-                  className="w-full bg-slate-950/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white text-lg placeholder:text-slate-700 focus:outline-none focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 transition-all"
+                  placeholder="admin1 또는 admin2"
+                  className="w-full bg-white/80 border border-pink-200/50 rounded-2xl py-4 pl-12 pr-5 text-gray-700 text-lg placeholder:text-gray-300 focus:outline-none focus:border-[#ffb6b9] focus:ring-4 focus:ring-[#ffb6b9]/20 transition-all font-medium"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Access Key</label>
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">비밀번호</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-indigo-400 transition-colors">
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-[#f48eb1] transition-colors">
                   <Lock size={18} />
                 </div>
                 <input
@@ -70,7 +70,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-slate-950/50 border border-white/5 rounded-2xl py-4 pl-14 pr-6 text-white text-lg placeholder:text-slate-700 focus:outline-none focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5 transition-all"
+                  className="w-full bg-white/80 border border-pink-200/50 rounded-2xl py-4 pl-14 pr-6 text-gray-700 text-lg placeholder:text-gray-300 focus:outline-none focus:border-[#ffb6b9] focus:ring-4 focus:ring-[#ffb6b9]/20 transition-all font-medium"
                   required
                 />
               </div>
@@ -78,22 +78,22 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-500 text-sm font-bold text-center animate-shake">
+            <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-500 text-sm font-bold text-center animate-shake">
               {error}
             </div>
           )}
 
           <button
             type="submit"
-            className="btn-primary w-full py-5 text-xl flex items-center justify-center gap-3 active:scale-95"
+            className="btn-primary w-full py-5 text-lg font-bold flex items-center justify-center gap-3 active:scale-95 text-gray-700"
           >
-            AUTHORIZE
-            <ArrowRight size={22} />
+            로그인
+            <ArrowRight size={20} className="text-gray-700" />
           </button>
         </form>
 
-        <p className="mt-12 text-center text-[10px] font-black text-slate-700 uppercase tracking-[0.4em]">
-          EngCoach Monitoring System v2.0
+        <p className="mt-12 text-center text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+          EngCoach 모니터링 시스템 v2.0
         </p>
       </div>
 
@@ -110,3 +110,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

@@ -6,11 +6,11 @@ export async function POST(request: Request) {
   try {
     const { userId } = await request.json();
 
-    const allExpressions = storage.getExpressions();
+    const allExpressions = await storage.getExpressions(userId);
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
     const expressions = allExpressions.filter((e: any) => 
-      e.userId === userId && new Date(e.createdAt) >= sevenDaysAgo
+      new Date(e.createdAt) >= sevenDaysAgo
     ).sort((a: any, b: any) => {
       if (b.priority !== a.priority) return b.priority - a.priority;
       return a.mastery - b.mastery;
@@ -32,8 +32,10 @@ export async function POST(request: Request) {
     
     const { questions } = JSON.parse(content);
 
-    const savedConversations = questions.map((q: { question: string, meaning: string, example: string }) =>
-      storage.addConversation(userId, q.question, q.meaning, q.example)
+    const savedConversations = await Promise.all(
+      questions.map((q: { question: string, meaning: string, example: string, targetExpression: string }) =>
+        storage.addConversation(userId, q.question, q.meaning, q.example, q.targetExpression)
+      )
     );
 
     return NextResponse.json({ success: true, count: savedConversations.length });

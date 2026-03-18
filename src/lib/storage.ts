@@ -1,102 +1,102 @@
-import fs from 'fs';
-import path from 'path';
-
-const DB_PATH = path.join(process.cwd(), 'data.json');
-
-const ensureDb = () => {
-  if (!fs.existsSync(DB_PATH)) {
-    fs.writeFileSync(DB_PATH, JSON.stringify({ expressions: [], conversations: [], suggestions: [] }, null, 2));
-  }
-};
+import { prisma } from './prisma';
 
 export const storage = {
-  getExpressions: () => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    return data.expressions || [];
-  },
-  addExpression: (exp: any) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    const newExp = {
-      id: Math.random().toString(36).substr(2, 9),
-      ...exp,
-      mastery: 0,
-      createdAt: exp.createdAt || new Date().toISOString()
-    };
-    data.expressions.push(newExp);
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-    return newExp;
-  },
-  updateExpression: (id: string, updates: any) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    const index = data.expressions.findIndex((e: any) => e.id === id);
-    if (index !== -1) {
-      data.expressions[index] = { ...data.expressions[index], ...updates };
-      fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+  getExpressions: async (userId?: string) => {
+    if (userId) {
+      return await prisma.expression.findMany({
+        where: { userId },
+        orderBy: { createdAt: 'desc' }
+      });
     }
+    return await prisma.expression.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
   },
-  deleteExpression: (id: string) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    data.expressions = (data.expressions || []).filter((e: any) => e.id !== id);
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+
+  addExpression: async (data: any) => {
+    return await prisma.expression.create({
+      data: {
+        expression: data.expression,
+        meaning: data.meaning,
+        explanation: data.explanation,
+        type: data.type,
+        userId: data.userId,
+        priority: data.priority,
+        mastery: data.mastery || 0,
+        createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
+        lastUsed: data.lastUsed ? new Date(data.lastUsed) : undefined
+      }
+    });
   },
-  getConversations: (userId: string) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    return (data.conversations || []).filter((c: any) => c.userId === userId);
+
+  updateExpression: async (id: string, updates: any) => {
+    const data: any = { ...updates };
+    if (updates.lastUsed) data.lastUsed = new Date(updates.lastUsed);
+    if (updates.createdAt) data.createdAt = new Date(updates.createdAt);
+    
+    return await prisma.expression.update({
+      where: { id },
+      data
+    });
   },
-  addConversation: (userId: string, question: string, meaning?: string, example?: string) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    const newConv = {
-      id: Math.random().toString(36).substr(2, 9),
-      userId,
-      question,
-      meaning,
-      example,
-      userAnswer: null,
-      createdAt: new Date().toISOString()
-    };
-    data.conversations.push(newConv);
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-    return newConv;
+
+  deleteExpression: async (id: string) => {
+    return await prisma.expression.delete({
+      where: { id }
+    });
   },
-  updateConversation: (id: string, userAnswer: string) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    const index = data.conversations.findIndex((c: any) => c.id === id);
-    if (index !== -1) {
-      data.conversations[index].userAnswer = userAnswer;
-      fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-      return data.conversations[index];
-    }
-    return null;
+
+  getConversations: async (userId: string) => {
+    return await prisma.conversation.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }
+    });
   },
-  getSuggestions: (userId: string) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    return (data.suggestions || []).filter((s: any) => s.userId === userId);
+
+  addConversation: async (userId: string, question: string, meaning?: string, example?: string, targetExpression?: string) => {
+    return await prisma.conversation.create({
+      data: {
+        userId,
+        question,
+        meaning,
+        example,
+        targetExpression,
+        createdAt: new Date()
+      }
+    });
   },
-  addSuggestion: (userId: string, suggestion: any) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    const newSug = {
-      id: Math.random().toString(36).substr(2, 9),
-      userId,
-      ...suggestion,
-      createdAt: new Date().toISOString()
-    };
-    data.suggestions.push(newSug);
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
-    return newSug;
+
+  updateConversation: async (id: string, userAnswer: string) => {
+    return await prisma.conversation.update({
+      where: { id },
+      data: { userAnswer }
+    });
   },
-  deleteSuggestion: (id: string) => {
-    ensureDb();
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
-    data.suggestions = (data.suggestions || []).filter((s: any) => s.id !== id);
-    fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
+
+  getSuggestions: async (userId: string) => {
+    return await prisma.suggestion.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }
+    });
+  },
+
+  addSuggestion: async (userId: string, suggestion: any) => {
+    return await prisma.suggestion.create({
+      data: {
+        userId,
+        original: suggestion.original,
+        expression: suggestion.expression,
+        type: suggestion.type,
+        meaning: suggestion.meaning,
+        explanation: suggestion.explanation,
+        createdAt: new Date()
+      }
+    });
+  },
+
+  deleteSuggestion: async (id: string) => {
+    return await prisma.suggestion.delete({
+      where: { id }
+    });
   }
 };
