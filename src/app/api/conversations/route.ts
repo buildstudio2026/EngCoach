@@ -43,3 +43,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to log answer', details: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { ids } = await request.json();
+    if (!ids || !Array.isArray(ids)) {
+      return NextResponse.json({ error: 'Invalid IDs' }, { status: 400 });
+    }
+
+    await storage.deleteConversations(ids);
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    return NextResponse.json({ error: 'Failed to delete conversations', details: error.message }, { status: 500 });
+  }
+}

@@ -190,6 +190,26 @@ export default function Practice() {
       setSubmitting(false);
     }
   };
+  
+  const quitPractice = async () => {
+    if (!userId || questions.length === 0) {
+      window.location.href = '/';
+      return;
+    }
+
+    try {
+      const ids = questions.map(q => q.id);
+      await fetch('/api/conversations', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids }),
+      });
+    } catch (error) {
+      console.error('Failed to quit cleanly:', error);
+    } finally {
+      window.location.href = '/';
+    }
+  };
 
   if (loading || !userId) {
     return (
@@ -376,7 +396,7 @@ export default function Practice() {
         {/* Action Gate */}
         <footer className="flex flex-col-reverse sm:flex-row gap-4 w-full">
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={quitPractice}
             className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white text-gray-500 font-bold hover:bg-gray-50 border border-gray-200 active:scale-95 transition-all flex items-center justify-center gap-2 text-base shadow-sm"
           >
             <ArrowLeft size={18} />

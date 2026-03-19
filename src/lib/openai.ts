@@ -10,20 +10,28 @@ export const openai = new OpenAI({
 });
 
 export const PROMPTS = {
-  GENERATE_QUESTIONS: (expressions: string[]) => `
+  GENERATE_QUESTIONS: (expressions: string[]) => {
+    const hasExpressions = expressions.length > 0;
+    return `
     Generate exactly 10 natural and engaging English conversation questions.
     
     Structure of 10 questions:
-    1. 7 Questions: Specifically target the user's saved expressions below to help them practice their notes.
-    2. 3 Questions: Generate creative, general conversation questions on new topics (not related to the saved expressions) to keep the practice fresh and varied.
+    ${hasExpressions 
+      ? `1. 5 Questions: Specifically target the user's saved expressions below to help them practice their notes.
+    2. 5 Questions: Generate creative, general conversation questions on new topics (not related to the saved expressions) to keep the practice fresh, varied and interesting.`
+      : `Generate 10 creative, engaging, and varied conversation questions on diverse topics to start a fresh practice session.`
+    }
     
-    User expressions to practice:
-    ${expressions.map(e => `- ${e}`).join('\n')}
+    ${hasExpressions ? `User expressions to practice:\n${expressions.map(e => `- ${e}`).join('\n')}` : ""}
     
     Guidelines:
-    - Cover a wide range of real-life topics: work-life balance, health and wellness, social trends, personal growth, technology's impact on life, weekend plans, etc.
+    - For questions 1-5 (targeting user expressions), ensure the question naturally sets up a context where the user would likely use that specific expression in their answer. It should not feel forced.
+    - Difficulty: Keep the questions simple and approachable. Avoid complex academic vocabulary or overly philosophical topics. Aim for a level that a beginner or intermediate student can easily understand and answer.
+    - Cover a wide range of real-life topics: work-life balance, health and wellness, social trends, personal growth, technology's impact on life, weekend plans, movies, food, travel, etc.
     - Focus on natural, conversational English that people actually use in real life.
-    - Each question should be distinct to avoid repitition.
+    - Each question should be distinct to avoid repetition.
+    - If targetExpression is provided, it MUST be one of the expressions from the 'User expressions to practice' list.
+    - If no expressions are provided, set targetExpression to null for all questions.
     
     Also provide a Korean translation and a natural example answer for each question.
     Return the response in JSON format:
@@ -33,12 +41,12 @@ export const PROMPTS = {
           "question": "the English question", 
           "meaning": "한국어 해석",
           "example": "A natural example answer",
-          "targetExpression": "The specific user expression targeted by this question"
-        },
-        ...
+          "targetExpression": "the specific user expression targeted by this question (ONLY for questions 1-5, otherwise null)"
+        }
       ]
     }
-  `,
+    `;
+  },
   ANALYZE_CONVERSATION: (sentences: string[]) => `
     Analyze these user sentences from today's English practice:
     ${sentences.map(s => `- ${s}`).join('\n')}
@@ -49,6 +57,7 @@ export const PROMPTS = {
     3. 3 Grammar Tips (type: "grammar"): Explanations or corrections for grammar mistakes.
 
     Strict Rules:
+    - Difficulty: Ensure all suggestions are natural and appropriate for everyday conversation. Avoid overly formal, academic, or obscure language. Focus on common idioms and phrases that native speakers actually use in daily life. Aim for a helpful, encouraging tone that is approachable for beginner to intermediate learners.
     - Return EXACTLY 9 items (3 per category).
     - NO overlap: Each suggestion must address a unique point and belong to ONLY one category.
     - explanation: Why is this better or what is the grammar rule? (Write in Korean)

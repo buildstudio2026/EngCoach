@@ -98,5 +98,11 @@ export const storage = {
     return await prisma.suggestion.delete({
       where: { id }
     });
+  },
+  
+  deleteConversations: async (ids: string[]) => {
+    return await prisma.conversation.deleteMany({
+      where: { id: { in: ids } }
+    });
   }
 };

@@ -66,7 +66,7 @@ export default function Dashboard() {
       const res = await fetch('/api/analysis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
+        body: JSON.stringify({ userId, date: selectedDate.toISOString() }),
       });
       if (res.ok) {
         fetchSuggestions();
@@ -142,6 +142,19 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error('Failed to add:', error);
+    }
+  };
+
+  const removeSuggestion = async (id: string) => {
+    try {
+      await fetch('/api/analysis', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      fetchSuggestions();
+    } catch (error) {
+      console.error('Failed to delete suggestion:', error);
     }
   };
 
@@ -261,7 +274,7 @@ export default function Dashboard() {
                 반복 학습하기
               </button>
               <button 
-                onClick={() => router.push('/practice')}
+                onClick={startPractice}
                 className="btn-primary px-8 py-5 text-lg font-black tracking-tight flex items-center gap-3 active:scale-95 transition-all text-gray-800"
               >
                 <div className="p-1 px-1.5 bg-pink-200 rounded-md border border-pink-300">
@@ -338,12 +351,22 @@ export default function Dashboard() {
                                <p className="text-blue-500 font-medium text-base">{s.meaning}</p>
                             </div>
                           </div>
-                          <button
-                            onClick={() => addToInputBox(s.id, s.expression, s.meaning, s.explanation)}
-                            className="shrink-0 w-full sm:w-auto p-3 bg-white hover:bg-blue-50 text-gray-400 hover:text-blue-500 rounded-xl border border-pink-100 hover:border-blue-200 transition-all flex justify-center items-center shadow-sm"
-                          >
-                            <Plus size={20} />
-                          </button>
+                          <div className="flex sm:flex-col gap-2 shrink-0 w-full sm:w-auto">
+                            <button
+                              onClick={() => addToInputBox(s.id, s.expression, s.meaning, s.explanation)}
+                              className="flex-1 sm:flex-none p-3 bg-white hover:bg-blue-50 text-gray-400 hover:text-blue-500 rounded-xl border border-pink-100 hover:border-blue-200 transition-all flex justify-center items-center shadow-sm"
+                              title="노트에 추가"
+                            >
+                              <Plus size={20} />
+                            </button>
+                            <button
+                              onClick={() => removeSuggestion(s.id)}
+                              className="flex-1 sm:flex-none p-3 bg-white hover:bg-rose-50 text-gray-300 hover:text-rose-400 rounded-xl border border-pink-100 hover:border-rose-200 transition-all flex justify-center items-center shadow-sm"
+                              title="삭제"
+                            >
+                              <Trash2 size={20} />
+                            </button>
+                          </div>
                         </div>
                         
                         <div className="pt-4 border-t border-pink-100">

@@ -4,13 +4,21 @@ import { openai, PROMPTS } from '@/lib/openai';
 
 export async function POST(request: Request) {
   try {
-    const { userId } = await request.json();
+    const { userId, date } = await request.json();
+    const targetDate = date ? new Date(date) : new Date();
 
     const allConversations = await storage.getConversations(userId);
     const conversations = allConversations
-      .filter((c: any) => c.userAnswer !== null)
+      .filter((c: any) => {
+        if (c.userAnswer === null) return false;
+        
+        const convDate = new Date(c.createdAt);
+        return convDate.getFullYear() === targetDate.getFullYear() &&
+               convDate.getMonth() === targetDate.getMonth() &&
+               convDate.getDate() === targetDate.getDate();
+      })
       .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 15);
+      .slice(0, 25);
 
     if (conversations.length === 0) {
       return NextResponse.json({ error: 'No practice completed yet' }, { status: 400 });
